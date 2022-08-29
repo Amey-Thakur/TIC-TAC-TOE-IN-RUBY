@@ -5,9 +5,9 @@ A Simple TicTacToe Game in Ruby
 ---
 
 >**Output**
+![Output1](https://user-images.githubusercontent.com/54937357/187277762-99200954-3a2e-4376-9055-3d19adb60df5.png)
+![Output2](https://user-images.githubusercontent.com/54937357/187277776-37972b27-c15a-4b90-ad39-d4693632842e.png)
 
-![Output1](https://user-images.githubusercontent.com/54937357/187276575-57d5ba55-25af-44e5-b202-f1f29b871714.png)
-![Output2](https://user-images.githubusercontent.com/54937357/187276582-1e82f3f4-90c7-4c93-a561-8ffbd5558304.png)
 
 
 
