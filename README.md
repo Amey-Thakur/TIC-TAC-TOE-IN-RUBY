@@ -14,4 +14,6 @@ A Simple TicTacToe Game in Ruby
 
 <p align="center"> <b> 👉🏻 Created to Learn Ruby 👈🏻 <b> </p>
  
-<p align="center"><a href='https://github.com/Amey-Thakur/RUBY', style='color: greenyellow;'> ✌🏻 Back To Repository ✌🏻</p>
+<p align="center"> <b> 👷 Project Authors: Amey Thakur and Mega Satish <b> </p>
+ 
+<p align="center"><a href='https://github.com/Amey-Thakur/ENGINEERING', style='color: greenyellow;'> ✌🏻 Back To Engineering ✌🏻</p>
