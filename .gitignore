@@ -1,0 +1,24 @@
+# Bundler
+/.bundle/
+/vendor/bundle/
+/lib/bundler/man/
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# OS Files
+Thumbs.db
+Desktop.ini
+
+# Ruby
+*.gem
+*.rbc
+.yardoc
+_yardoc/
+doc/
+rdoc/
+coverage/
