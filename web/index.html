@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Tic Tac Toe in Ruby</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/css/xterm.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/lib/xterm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.10.0/lib/addon-fit.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ruby/3.3-wasm-wasi@2.6.0/dist/browser.script.iife.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #terminal {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="terminal"></div>
+    <script>
+        const { DefaultRubyVM } = window["ruby-wasm-wasi"];
+
+        const main = async () => {
+            // Initialize Terminal
+            const term = new Terminal({
+                cursorBlink: true,
+                fontFamily: 'Menlo, Monaco, "Courier New", monospace',
+                fontSize: 16,
+                theme: {
+                    background: '#000000',
+                    foreground: '#f0f0f0',
+                }
+            });
+            const fitAddon = new FitAddon.FitAddon();
+            term.loadAddon(fitAddon);
+            term.open(document.getElementById("terminal"));
+            fitAddon.fit();
+
+            window.addEventListener('resize', () => fitAddon.fit());
+
+            term.write("Loading Ruby VM...\r\n");
+
+            try {
+                // Initialize Ruby VM
+                const response = await fetch(
+                    "https://cdn.jsdelivr.net/npm/@ruby/3.3-wasm-wasi@2.6.0/dist/ruby+stdlib.wasm"
+                );
+                if (!response.ok) throw new Error("Failed to load Ruby WASM");
+                const buffer = await response.arrayBuffer();
+                const module = await WebAssembly.compile(buffer);
+                const { vm } = await DefaultRubyVM(module);
+
+                term.write("Fetching source code...\r\n");
+
+                // Fetch Source Files (URL Encoded)
+                const files = [
+                    "Source%20Code/TicTacToe/lib/main.rb",
+                    "Source%20Code/TicTacToe/lib/game.rb",
+                    "Source%20Code/TicTacToe/lib/board.rb",
+                    "Source%20Code/TicTacToe/lib/player.rb",
+                    "Source%20Code/TicTacToe/lib/display.rb"
+                ];
+
+                // Create Virtual Filesystem Structure
+                vm.eval(`
+            require "fileutils"
+            FileUtils.mkdir_p("/src")
+          `);
+
+                for (const fileUrl of files) {
+                    const fileName = decodeURIComponent(fileUrl).split('/').pop();
+                    try {
+                        const res = await fetch(fileUrl);
+                        if (!res.ok) throw new Error(`Failed to fetch ${fileUrl}`);
+                        const content = await res.text();
+
+                        // Escape backticks and backslashes for JS string interpolation compatibility
+                        // We use a safe delimiter for Ruby heredoc to avoid ANY interpolation on the Ruby side
+                        const safeContent = content.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
+
+                        vm.eval(`
+                    File.write("/src/${fileName}", <<~'RUBY_EOF'
+${safeContent}
+RUBY_EOF
+)
+                  `);
+                    } catch (e) {
+                        term.write(`Error loading ${fileName}: ${e.message}\r\n`);
+                        console.error(e);
+                        return;
+                    }
+                }
+
+                term.clear();
+                term.write("Welcome to Tic Tac Toe! (Powered by Ruby.wasm)\r\n");
+                term.write("Note: Input requests will appear as browser prompts.\r\n\r\n");
+
+                // Override Kernel#gets to use window.prompt
+                // This allows us to block the Ruby execution thread (which is the main thread here)
+                // by using the browser's native blocking prompt, ensuring logic flow triggers correctly.
+                vm.eval(`
+              module Kernel
+                  def gets
+                      # Using browser prompt for blocking input
+                      input = JS.global.call(:prompt, "Enter input:")
+                      
+                      # Handle cancel/newline
+                      if input == JS::Null || input == nil
+                          return "" 
+                      end
+                      
+                      # Echo input to terminal for better UX
+                      JS.global[:term].call(:write, input.to_s + "\\r\\n")
+                      
+                      input.to_s + "\\n"
+                  end
+              end
+
+              require "js"
+              class JSStdout
+                  def write(str)
+                      # Convert newlines for xterm
+                      formatted = str.to_s.gsub("\\n", "\\r\\n")
+                      JS.global[:term].call(:write, formatted)
+                  end
+              end
+              
+              $stdout = JSStdout.new
+              $stderr = JSStdout.new
+          `);
+
+                // Expose term to global for Ruby
+                window.term = term;
+
+                // Execute Game
+                vm.eval(`
+              Dir.chdir("/src")
+              load "main.rb"
+          `);
+            } catch (e) {
+                term.write(`\r\nCritical Error: ${e.message}\r\n`);
+                console.error(e);
+            }
+        };
+
+        main();
+    </script>
+</body>
+
+</html>
