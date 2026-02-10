@@ -113,8 +113,8 @@
     </script>
 
     <script type="module">
-        import { RubyVM } from "@ruby/wasm-wasi";
-        import { WASI, ConsoleStdout, PreopenDirectory, Fd, File } from "@bjorn3/browser_wasi_shim";
+        import { RubyVM } from "@ruby/wasm-wasi/dist/esm/vm.js";
+        import { WASI, ConsoleStdout, PreopenDirectory, OpenFile, File } from "@bjorn3/browser_wasi_shim";
 
         log("Modules loaded (RubyVM + WASI Shim).");
         updateProgress(10);
@@ -139,24 +139,27 @@
 
                 // 2. Setup WASI Environment
                 log("Configuring WASI Environment...");
+
+                // FDS: 0=stdin, 1=stdout, 2=stderr, 3=preopen(/)
                 const fds = [
-                    new Fd(new File([])), // stdin (dummy)
-                    new Fd(new ConsoleStdout({
-                        write: (buffer) => {
-                            const text = new TextDecoder("utf-8").decode(buffer);
-                            // Xterm handles formatting
-                            term.write(text.replace(/\n/g, "\r\n"));
-                            return buffer.length;
-                        }
-                    })), // stdout
-                    new Fd(new ConsoleStdout({
+                    new OpenFile(new File([])), // stdin
+                    new ConsoleStdout({
                         write: (buffer) => {
                             const text = new TextDecoder("utf-8").decode(buffer);
                             term.write(text.replace(/\n/g, "\r\n"));
                             return buffer.length;
                         }
-                    })), // stderr
+                    }), // stdout
+                    new ConsoleStdout({
+                        write: (buffer) => {
+                            const text = new TextDecoder("utf-8").decode(buffer);
+                            term.write(text.replace(/\n/g, "\r\n"));
+                            return buffer.length;
+                        }
+                    }), // stderr
+                    new PreopenDirectory("/", new Map()) // Mount root for read/write
                 ];
+
                 const wasi = new WASI([], [], fds, { debug: false });
 
                 // 3. Create Ruby VM
@@ -179,6 +182,8 @@
                 log("Instantiating WebAssembly...");
                 const { instance } = await WebAssembly.instantiate(buffer, imports);
                 await vm.setInstance(instance);
+
+                // Initialize WASI (handles _start or _initialize)
                 wasi.initialize(instance);
 
                 // 6. Boot
@@ -198,6 +203,7 @@
                     "Source%20Code/TicTacToe/lib/display.rb"
                 ];
 
+                // Now this should work because "/" is writable
                 vm.eval(`require "fileutils"; FileUtils.mkdir_p("/src")`);
 
                 let loadedCount = 0;
