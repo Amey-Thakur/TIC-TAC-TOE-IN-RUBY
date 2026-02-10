@@ -190,7 +190,6 @@
 
                 // 7. Load Source Files
                 log("Fetching Project Source Code...");
-                // term.write("Fetching source files...\r\n");
 
                 const files = [
                     "Source%20Code/TicTacToe/lib/main.rb",
@@ -217,8 +216,8 @@
 
                 updateProgress(100);
 
-                // 8. Start Game
-                setTimeout(() => {
+                // 8. Start Game (Fiber Async Mode)
+                setTimeout(async () => {
                     document.getElementById("status").style.display = "none";
                     document.getElementById("terminal").style.display = "block";
                     fitAddon.fit();
@@ -228,47 +227,77 @@
                     term.write("\x1b[31;1mTic Tac Toe in Ruby\x1b[0m | Amey & Mega\r\n");
                     term.write("----------------------------------------------\r\n");
 
-                    // I/O Override via JS Interop
-                    log("Enabling JS Interop and overrides...");
+                    // Define Fiber-based execution
                     vm.eval(`
-                  begin
                     require "js"
                     STDOUT.sync = true
                     STDERR.sync = true
-                    
+
                     module Kernel
                         def gets
-                            # Explicitly call JS prompt
-                            input = JS.global.call(:prompt, "Your Move (Input required):")
-                            if input == JS::Null || input == nil
-                                 return "exit\\n"
-                            end
-                            # Echo input to terminal
-                            JS.global[:term].call(:write, input.to_s + "\\r\\n")
-                            input.to_s + "\\n"
+                             # Suspend execution and return a unique symbol to JS
+                             Fiber.yield :wait_for_input
                         end
                     end
-                    
-                    # Test JS Interop
-                    JS.global[:console].call(:log, "Ruby-side JS Interop verified.")
-                    puts "\x1b[32mSystem Ready. Loading Game...\x1b[0m"
 
-                  rescue Exception => e
-                    puts "\x1b[31mBOOT ERROR: #{e.full_message}\x1b[0m"
-                  end
+                    $game_fiber = Fiber.new do
+                        begin
+                            Dir.chdir("/src")
+                            load "main.rb"
+                        rescue Exception => e
+                            puts "\x1b[31mGAME CRASH: #{e.full_message}\x1b[0m"
+                        end
+                    end
                 `);
 
-                    window.term = term;
+                    // Input handling state
+                    let currentLine = "";
 
-                    log("Launching main.rb...");
-                    vm.eval(`
-                  begin
-                    Dir.chdir("/src")
-                    load "main.rb"
-                  rescue Exception => e
-                    puts "\x1b[31mGAME CRASH: #{e.full_message}\x1b[0m"
-                  end
-                `);
+                    term.onData(key => {
+                        const charCode = key.charCodeAt(0);
+
+                        if (charCode === 13) { // Enter
+                            term.write("\r\n");
+                            // Resume Ruby with the line
+                            const inputToSend = currentLine;
+                            currentLine = "";
+                            resumeGame(inputToSend);
+                        } else if (charCode === 127) { // Backspace
+                            if (currentLine.length > 0) {
+                                currentLine = currentLine.slice(0, -1);
+                                term.write("\b \b");
+                            }
+                        } else {
+                            currentLine += key;
+                            term.write(key);
+                        }
+                    });
+
+                    // Function to resume execution
+                    async function resumeGame(input = null) {
+                        try {
+                            let result;
+                            if (input === null) {
+                                // Initial start
+                                result = vm.eval("$game_fiber.resume");
+                            } else {
+                                // Resume with input strings (need separate eval to pass string safely)
+                                // We use global JS object to pass string to avoid quoting hell
+                                window.rubyInput = input;
+                                result = vm.eval(`$game_fiber.resume(JS.global[:rubyInput].to_s.chomp)`);
+                            }
+
+                            // If execution finishes or errors, we might want to know
+                            // Unhandled errors will be caught by the outer try/catch or window.onerror
+
+                        } catch (e) {
+                            term.write(`\r\n\x1b[31mRuby Error: ${e.message}\x1b[0m\r\n`);
+                        }
+                    }
+
+                    log("Starting Fiber Loop...");
+                    await resumeGame(); // Start the game
+
                 }, 500);
 
             } catch (e) {
