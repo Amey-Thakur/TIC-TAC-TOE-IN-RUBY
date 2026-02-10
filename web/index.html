@@ -113,7 +113,6 @@
     </script>
 
     <script type="module">
-        // Import directly from the package name defined in importmap
         import { RubyVM } from "@ruby/wasm-wasi";
         import { WASI, ConsoleStdout, PreopenDirectory, OpenFile, File } from "@bjorn3/browser_wasi_shim";
 
@@ -141,25 +140,23 @@
                 // 2. Setup WASI Environment
                 log("Configuring WASI Environment...");
 
-                // FDS: 0=stdin, 1=stdout, 2=stderr, 3=preopen(/)
                 const fds = [
                     new OpenFile(new File([])), // stdin
-                    new ConsoleStdout({
-                        write: (buffer) => {
+                    new ConsoleStdout((buffer) => {
+                        try {
                             const text = new TextDecoder("utf-8").decode(buffer);
-                            // Xterm handles formatting
                             term.write(text.replace(/\n/g, "\r\n"));
                             return buffer.length;
-                        }
+                        } catch (e) { console.error("Stdout Error", e); return 0; }
                     }), // stdout
-                    new ConsoleStdout({
-                        write: (buffer) => {
+                    new ConsoleStdout((buffer) => {
+                        try {
                             const text = new TextDecoder("utf-8").decode(buffer);
-                            term.write(text.replace(/\n/g, "\r\n"));
+                            term.write(`\x1b[31m${text.replace(/\n/g, "\r\n")}\x1b[0m`);
                             return buffer.length;
-                        }
+                        } catch (e) { console.error("Stderr Error", e); return 0; }
                     }), // stderr
-                    new PreopenDirectory("/", new Map()) // Mount root for read/write
+                    new PreopenDirectory("/", new Map()) // Mount root
                 ];
 
                 const wasi = new WASI([], [], fds, { debug: false });
@@ -184,18 +181,16 @@
                 log("Instantiating WebAssembly...");
                 const { instance } = await WebAssembly.instantiate(buffer, imports);
                 await vm.setInstance(instance);
-
-                // Initialize WASI (handles _start or _initialize)
                 wasi.initialize(instance);
 
                 // 6. Boot
                 log("Booting Ruby Kernel...");
-                vm.initialize(["ruby.wasm", "-e_=0"]);
+                vm.initialize(["ruby.wasm", "-e_=0", "-EUTF-8"]);
                 updateProgress(70);
 
                 // 7. Load Source Files
                 log("Fetching Project Source Code...");
-                term.write("Fetching source files...\r\n");
+                // term.write("Fetching source files...\r\n");
 
                 const files = [
                     "Source%20Code/TicTacToe/lib/main.rb",
@@ -205,7 +200,6 @@
                     "Source%20Code/TicTacToe/lib/display.rb"
                 ];
 
-                // Now this should work because "/" is writable
                 vm.eval(`require "fileutils"; FileUtils.mkdir_p("/src")`);
 
                 let loadedCount = 0;
@@ -235,24 +229,46 @@
                     term.write("----------------------------------------------\r\n");
 
                     // I/O Override via JS Interop
+                    log("Enabling JS Interop and overrides...");
                     vm.eval(`
+                  begin
                     require "js"
+                    STDOUT.sync = true
+                    STDERR.sync = true
+                    
                     module Kernel
                         def gets
+                            # Explicitly call JS prompt
                             input = JS.global.call(:prompt, "Your Move (Input required):")
                             if input == JS::Null || input == nil
-                                 # Exit gracefully
                                  return "exit\\n"
                             end
+                            # Echo input to terminal
                             JS.global[:term].call(:write, input.to_s + "\\r\\n")
                             input.to_s + "\\n"
                         end
                     end
+                    
+                    # Test JS Interop
+                    JS.global[:console].call(:log, "Ruby-side JS Interop verified.")
+                    puts "\x1b[32mSystem Ready. Loading Game...\x1b[0m"
+
+                  rescue Exception => e
+                    puts "\x1b[31mBOOT ERROR: #{e.full_message}\x1b[0m"
+                  end
                 `);
 
                     window.term = term;
 
-                    vm.eval(`Dir.chdir("/src"); load "main.rb"`);
+                    log("Launching main.rb...");
+                    vm.eval(`
+                  begin
+                    Dir.chdir("/src")
+                    load "main.rb"
+                  rescue Exception => e
+                    puts "\x1b[31mGAME CRASH: #{e.full_message}\x1b[0m"
+                  end
+                `);
                 }, 500);
 
             } catch (e) {
