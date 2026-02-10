@@ -1,0 +1,72 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ast (2.4.3)
+    diff-lcs (1.6.2)
+    jaro_winkler (1.5.6)
+    kwalify (0.7.2)
+    parallel (1.27.0)
+    parser (2.7.2.0)
+      ast (~> 2.4.1)
+    psych (3.1.0)
+    rainbow (3.1.1)
+    reek (6.0.1)
+      kwalify (~> 0.7.0)
+      parser (>= 2.5.0.0, < 2.8, != 2.5.1.1)
+      psych (~> 3.1.0)
+      rainbow (>= 2.0, < 4.0)
+    rexml (3.4.4)
+    rspec (3.13.2)
+      rspec-core (~> 3.13.0)
+      rspec-expectations (~> 3.13.0)
+      rspec-mocks (~> 3.13.0)
+    rspec-core (3.13.6)
+      rspec-support (~> 3.13.0)
+    rspec-expectations (3.13.5)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-mocks (3.13.7)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-support (3.13.7)
+    rubocop (0.82.0)
+      jaro_winkler (~> 1.5.1)
+      parallel (~> 1.10)
+      parser (>= 2.7.0.1)
+      rainbow (>= 2.2.2, < 4.0)
+      rexml
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (>= 1.4.0, < 2.0)
+    ruby-progressbar (1.13.0)
+    unicode-display_width (1.8.0)
+
+PLATFORMS
+  x64-mingw-ucrt
+
+DEPENDENCIES
+  reek (= 6.0.1)
+  rspec (~> 3.0)
+  rubocop (= 0.82.0)
+
+CHECKSUMS
+  ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
+  diff-lcs (1.6.2) sha256=9ae0d2cba7d4df3075fe8cd8602a8604993efc0dfa934cff568969efb1909962
+  jaro_winkler (1.5.6) sha256=007db7805527ada1cc12f2547676181d63b0a504ec4dd7a9a2eb2424521ccd81
+  kwalify (0.7.2) sha256=4eee60e7dc2c4f182af30e1a64639bc1787a985462b4615bba7117acfd78fdd9
+  parallel (1.27.0) sha256=4ac151e1806b755fb4e2dc2332cbf0e54f2e24ba821ff2d3dcf86bf6dc4ae130
+  parser (2.7.2.0) sha256=dfd0e872fe3ca330cdbb9222ab14f0a2e254749f78344b791143510f4cadefb8
+  psych (3.1.0) sha256=a858cf8d4bc636fd6dc635131c4df24d25da910278a873a0fbe4927d17155b26
+  rainbow (3.1.1) sha256=039491aa3a89f42efa1d6dec2fc4e62ede96eb6acd95e52f1ad581182b79bc6a
+  reek (6.0.1) sha256=befaea6ad58167e20d2e329d79b527b8017de103e1e81c1bca351ce375313bdb
+  rexml (3.4.4) sha256=19e0a2c3425dfbf2d4fc1189747bdb2f849b6c5e74180401b15734bc97b5d142
+  rspec (3.13.2) sha256=206284a08ad798e61f86d7ca3e376718d52c0bc944626b2349266f239f820587
+  rspec-core (3.13.6) sha256=a8823c6411667b60a8bca135364351dda34cd55e44ff94c4be4633b37d828b2d
+  rspec-expectations (3.13.5) sha256=33a4d3a1d95060aea4c94e9f237030a8f9eae5615e9bd85718fe3a09e4b58836
+  rspec-mocks (3.13.7) sha256=0979034e64b1d7a838aaaddf12bf065ea4dc40ef3d4c39f01f93ae2c66c62b1c
+  rspec-support (3.13.7) sha256=0640e5570872aafefd79867901deeeeb40b0c9875a36b983d85f54fb7381c47c
+  rubocop (0.82.0) sha256=2d6c5bc7d9b9c1ac1e8bb8a724ea761d724661ebec143eb0b92345b5a8e8d25f
+  ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
+  unicode-display_width (1.8.0) sha256=0292132d364d59fcdd83f144910c48b3c8332b28a14c5c04bb093dd165600488
+
+BUNDLED WITH
+  4.0.6

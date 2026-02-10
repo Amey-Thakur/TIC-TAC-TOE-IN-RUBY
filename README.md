@@ -48,6 +48,8 @@
 **Tic Tac Toe in Ruby** is a robust interactive system engineered to demonstrate the elegance and efficiency of Ruby's object-oriented architecture. By bridging the gap between foundational algorithms and tactile terminal-based gaming, this repository provides a comprehensive study into systematic software engineering and logical state orchestration.
 
 The application serves as a digital exploration of game theory and responsive console interaction, structured into modular components that ensure maintainability and high-performance execution directly within the shell environment.
+<br><br>
+This project was developed as a distinctive milestone during the **[30-Day Ruby Challenge](https://amey-thakur.github.io/RUBY/)**, a collaborative engineering sprint undertaken by **Amey Thakur** and **Mega Satish**. It represents the practical synthesis of concepts explored in the comprehensive **[Ruby Repository](https://github.com/Amey-Thakur/RUBY)**, demonstrating the transition from theoretical study to production-grade implementation.
 
 ### Engineering Heuristics
 The interaction model is governed by strict **computational design patterns** ensuring fidelity and responsiveness:
@@ -74,6 +76,7 @@ The interaction model is governed by strict **computational design patterns** en
 | **Cinematic Playback** | A deterministic **Game Setup Sequence** that ensures assets are synchronized before interaction. |
 | **Dynamic Turn-Taking** | Integrated **Player Orchestration Engine** for visual and structural turn classification. |
 | **Victory Detection** | **High-Fidelity Algorithmic Scanners** that celebrate mission completion milestones. |
+| **Zero-Latency Web Runtime** | Deployed via **WebAssembly (WASM)** with **Fiber-based non-blocking I/O** for a native console feel in the browser. |
 | **Structural Clarity** | In-depth and detailed comments integrated throughout the codebase for transparent logic study. |
 
 > [!NOTE]
@@ -82,6 +85,9 @@ The interaction model is governed by strict **computational design patterns** en
 
 ### Tech Stack
 - **Language**: Ruby 3.x
+- **Runtime (Web)**: **WebAssembly (WASM)** via `@ruby/3.3-wasm-wasi`
+- **Concurrency**: **Ruby Fibers** (Coroutines) for non-blocking browser I/O
+- **Terminal Engine**: **xterm.js** with `addon-fit` for responsive rendering
 - **Logic**: **Object-Oriented Orchestration** (Modular Classes)
 - **Testing**: **RSpec** (Behavior-Driven Development)
 - **Code Quality**: **RuboCop** (Static Code Analysis)
@@ -113,8 +119,15 @@ TIC-TAC-TOE-IN-RUBY/
 │       │   └── player.rb            # Data Class
 │       └── spec/                    # Verification Layer
 │           ├── board_spec.rb        # Unit Tests
-│           └── game_spec.rb         # System Tests
+│           ├── game_spec.rb         # System Tests
+│           └── spec_helper.rb       # RSpec Configuration
 │
+├── web/                             # Web Deployment Layer
+│   └── index.html                   # WASM Runtime Entry Point
+│
+
+├── Gemfile                          # Dependency Definitions
+├── Gemfile.lock                     # Dependency Lockfile
 ├── SECURITY.md                      # Security Protocols
 ├── CITATION.cff                     # Project Citation Manifest
 ├── codemeta.json                    # Metadata Standard
@@ -150,7 +163,10 @@ TIC-TAC-TOE-IN-RUBY/
 
 ### 1. Prerequisites
 - **Ruby 3.0+**: Required for runtime execution. [Download Ruby](https://www.ruby-lang.org/)
+- **Bundler**: For managing gem dependencies. (`gem install bundler`)
 - **Git**: For version control and cloning. [Download Git](https://git-scm.com/downloads)
+
+
 
 > [!WARNING]
 > **Runtime Environment Isolation**
@@ -166,18 +182,32 @@ git clone https://github.com/Amey-Thakur/TIC-TAC-TOE-IN-RUBY.git
 cd TIC-TAC-TOE-IN-RUBY
 ```
 
-#### Step 2: Navigate to Main
-Access the primary entry point:
+#### Step 2: Install Dependencies
+Install the required gems (RSpec, RuboCop, Reek) defined in the `Gemfile`:
 ```bash
-cd "Source Code/TicTacToe/lib"
+bundle install
 ```
 
 ### 3. Execution
-Launch the primary game loop:
 
+#### Play the Game
+Launch the primary game loop:
 ```bash
-ruby main.rb
+ruby "Source Code/TicTacToe/lib/main.rb"
 ```
+
+#### Run Tests
+Verify the system integrity using RSpec:
+```bash
+bundle exec rspec
+```
+
+> [!TIP]
+> **Instant Play**
+>
+> You can play the game instantly in your browser without any installation via our WebAssembly deployment:
+>
+> 👉🏻 **[Play TicTacToe Live](https://amey-thakur.github.io/TIC-TAC-TOE-IN-RUBY/)**
 
 ---
 
