@@ -1,5 +1,4 @@
 # Standardized Git Attributes for Scholarly Archiving
-
 # Handle line endings automatically for files detected as text
 # and perform LF normalization on checkin.
 * text=auto eol=lf
@@ -19,3 +18,7 @@
 
 # Academic/Scholarly classification
 *.md linguist-documentation
+
+# Hide web assets from language statistics
+*.html linguist-detectable=false
+*.js linguist-detectable=false
