@@ -1,11 +1,11 @@
 <div align="center">
 
   <a name="readme-top"></a>
-  # Tic Tac Toe in Ruby
+  # <a href="https://amey-thakur.github.io/TIC-TAC-TOE-IN-RUBY/"><img src="docs/Ruby%20Logo.png" height="55" valign="middle"></a> <br> Tic Tac Toe in Ruby
 
   [![License: MIT](https://img.shields.io/badge/License-MIT-lightgrey)](LICENSE)
   ![Status](https://img.shields.io/badge/Status-Completed-success)
-  [![Technology](https://img.shields.io/badge/Technology-Ruby-red)](https://github.com/Amey-Thakur/TIC-TAC-TOE-IN-RUBY)
+  [![Technology](https://img.shields.io/badge/Technology-Ruby-CC0000)](https://github.com/Amey-Thakur/TIC-TAC-TOE-IN-RUBY)
   [![Developed by Amey Thakur and Mega Satish](https://img.shields.io/badge/Developed%20by-Amey%20Thakur%20%26%20Mega%20Satish-blue.svg)](https://github.com/Amey-Thakur/TIC-TAC-TOE-IN-RUBY)
 
   A high-fidelity, modular terminal-based Tic Tac Toe game engineered in Ruby, demonstrating strict adherence to Object-Oriented Programming (OOP) principles and Human-Machine Interaction (HMI) design within a console environment.
@@ -237,7 +237,7 @@ Special thanks to the **mentors and peers** whose encouragement, discussions, an
 
   <br>
 
-  ✅ **[TicTacToe Ruby Project](https://github.com/Amey-Thakur/TIC-TAC-TOE-IN-RUBY)**
+  <img src="docs/Ruby%20Logo.png" width="18" height="18" valign="middle"> **[TicTacToe Ruby Project](https://github.com/Amey-Thakur/TIC-TAC-TOE-IN-RUBY)**
 
   ---
 
