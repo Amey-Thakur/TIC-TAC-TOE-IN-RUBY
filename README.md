@@ -247,7 +247,7 @@ Copyright © 2022 Amey Thakur & Mega Satish
 
 **Created & Maintained by**: [Amey Thakur](https://github.com/Amey-Thakur) & [Mega Satish](https://github.com/msatmod)
 
-This project features **Tic Tac Toe in Ruby**, a logic-driven interactive gaming system. It represents a personal exploration into **Ruby**-based class orchestration and high-performance console design.
+This project features **Tic Tac Toe in Ruby**, a logic-driven interactive gaming system. It represents a personal exploration into **Ruby**-based class orchestration and high-performance console design. It was developed as a key project within the **[30-Day Ruby Challenge](https://amey-thakur.github.io/RUBY/)**, marking a significant step in mastery of the language.
 
 **Connect:** [GitHub](https://github.com/Amey-Thakur) &nbsp;·&nbsp; [LinkedIn](https://www.linkedin.com/in/amey-thakur) &nbsp;·&nbsp; [ORCID](https://orcid.org/0000-0001-5644-1575)
 
