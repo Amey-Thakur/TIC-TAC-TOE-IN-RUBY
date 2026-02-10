@@ -47,4 +47,4 @@ graph TD
 
 ---
 
-*Technical Specification | Tic Tac Toe Project | Version 1.0*
+*Technical Specification | TicTacToe Ruby Project | Version 1.0*
