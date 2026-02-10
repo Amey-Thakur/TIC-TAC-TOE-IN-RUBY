@@ -5,7 +5,7 @@
 
   [![License: MIT](https://img.shields.io/badge/License-MIT-lightgrey)](LICENSE)
   ![Status](https://img.shields.io/badge/Status-Completed-success)
-  [![Technology](https://img.shields.io/badge/Technology-Ruby-CC0000)](https://github.com/Amey-Thakur/TIC-TAC-TOE-IN-RUBY)
+  [![Technology](https://img.shields.io/badge/Technology-Ruby-CC0000)](https://amey-thakur.github.io/RUBY/)
   [![Developed by Amey Thakur and Mega Satish](https://img.shields.io/badge/Developed%20by-Amey%20Thakur%20%26%20Mega%20Satish-blue.svg)](https://github.com/Amey-Thakur/TIC-TAC-TOE-IN-RUBY)
 
   A high-fidelity, modular terminal-based Tic Tac Toe game engineered in Ruby, demonstrating strict adherence to Object-Oriented Programming (OOP) principles and Human-Machine Interaction (HMI) design within a console environment.
