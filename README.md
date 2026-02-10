@@ -237,7 +237,7 @@ Special thanks to the **mentors and peers** whose encouragement, discussions, an
 
   <br>
 
-  <a href="https://amey-thakur.github.io/RUBY/"><img src="docs/Ruby%20Logo.png" width="18" height="18" valign="middle"></a> **[TicTacToe Ruby Game](https://github.com/Amey-Thakur/TIC-TAC-TOE-IN-RUBY)**
+  <a href="https://amey-thakur.github.io/RUBY/"><img src="docs/Ruby%20Logo.png" width="18" height="18" valign="middle"></a> **[TicTacToe Ruby Game](https://amey-thakur.github.io/TIC-TAC-TOE-IN-RUBY/)**
 
   ---
 
