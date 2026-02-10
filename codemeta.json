@@ -3,7 +3,7 @@
     "@type": "SoftwareSourceCode",
     "name": "TIC-TAC-TOE-IN-RUBY",
     "version": "1.0.0",
-    "description": "A Simple TicTacToe Game in Ruby",
+    "description": "Tic Tac Toe in Ruby is a robust interactive system engineered to demonstrate the elegance and efficiency of Ruby's object-oriented architecture.",
     "identifier": "TIC-TAC-TOE-IN-RUBY",
     "license": "https://spdx.org/licenses/MIT.html",
     "programmingLanguage": [

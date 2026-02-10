@@ -15,7 +15,7 @@ require_relative 'display'
 # Description:
 # The `Game` class acts as the central orchestrator for the application.
 # It initializes the game environment, manages the chronological flow of turns,
-# facilities player creation, and determines the final outcome (Win/Draw).
+# facilitates player creation, and determines the final outcome (Win/Draw).
 #
 # Architecture:
 # - Initialization: Boots the board and prepares player slots.

@@ -19,7 +19,7 @@
 
 # rubocop:disable Layout/LineLength
 
-# Text needed to Tic-Tac-Toe
+# Module for Tic-Tac-Toe display logic
 module Display
   # Introduction message welcoming the user to the simulation.
   def display_intro

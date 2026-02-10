@@ -16,7 +16,7 @@
 # game marker (symbol), ensuring consistent state tracking throughout the match.
 # ==============================================================================
 
-# Game need two players
+# The Game requires two players
 class Player
   attr_reader :name, :symbol
 
