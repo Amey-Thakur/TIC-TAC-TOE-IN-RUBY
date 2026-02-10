@@ -131,14 +131,14 @@ TIC-TAC-TOE-IN-RUBY/
   <b>Output 1</b>
   <br>
   <i>Gameplay between Amey and Mega.</i>
-  <br><br>
+  <br>
   <img src="Output1.png" alt="Output 1" width="90%">
-  <br><br><br>
+  <br>
  
   <b>Output 2</b>
   <br>
   <i>Tic Tac Toe Board with Amey and Mega.</i>
-  <br><br>
+  <br>
   <img src="Output2.png" alt="Output 2" width="90%">
 </div>
 
