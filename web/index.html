@@ -113,7 +113,8 @@
     </script>
 
     <script type="module">
-        import { RubyVM } from "@ruby/wasm-wasi/dist/esm/vm.js";
+        // Import directly from the package name defined in importmap
+        import { RubyVM } from "@ruby/wasm-wasi";
         import { WASI, ConsoleStdout, PreopenDirectory, OpenFile, File } from "@bjorn3/browser_wasi_shim";
 
         log("Modules loaded (RubyVM + WASI Shim).");
@@ -146,6 +147,7 @@
                     new ConsoleStdout({
                         write: (buffer) => {
                             const text = new TextDecoder("utf-8").decode(buffer);
+                            // Xterm handles formatting
                             term.write(text.replace(/\n/g, "\r\n"));
                             return buffer.length;
                         }
