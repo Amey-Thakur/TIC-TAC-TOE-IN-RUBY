@@ -11,15 +11,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/lib/xterm.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.10.0/lib/addon-fit.js"></script>
 
-    <!-- IMPORT MAP: The modern way to handle bare imports in browser -->
-    <script type="importmap">
-    {
-      "imports": {
-        "@ruby/3.3-wasm-wasi": "https://cdn.jsdelivr.net/npm/@ruby/3.3-wasm-wasi@2.6.0/dist/esm/index.js",
-        "@ruby/wasm-wasi": "https://cdn.jsdelivr.net/npm/@ruby/wasm-wasi@2.6.0/dist/esm/index.js"
-      }
-    }
-    </script>
+    <!-- Load Ruby WASM IIFE Bundle (Downgraded to 2.5.0 for stability) -->
+    <script src="https://cdn.jsdelivr.net/npm/@ruby/3.3-wasm-wasi@2.5.0/dist/browser.script.iife.js"></script>
 
     <style>
         body {
@@ -90,7 +83,6 @@
         <div id="log"></div>
     </div>
 
-    <!-- Logger Script -->
     <script>
         const logDiv = document.getElementById("log");
         const progressFill = document.getElementById("progressFill");
@@ -118,18 +110,26 @@
             return false;
         };
 
-        log("Bootstrapping...");
-    </script>
-
-    <!-- MODULE SCRIPT: Logic using Import Map -->
-    <script type="module">
-        import { DefaultRubyVM } from "@ruby/3.3-wasm-wasi";
-
-        log("Module loaded successfully via Import Map.");
-        updateProgress(10);
-
         const start = async () => {
             try {
+                log("Waiting for Ruby IIFE (v2.5.0)...");
+                updateProgress(10);
+
+                // Wait max 10s for global to appear
+                let attempts = 0;
+                while (!window["ruby-wasm-wasi"] && attempts < 20) {
+                    await new Promise(r => setTimeout(r, 500));
+                    attempts++;
+                }
+
+                if (!window["ruby-wasm-wasi"]) {
+                    throw new Error("ruby-wasm-wasi Global Variable NOT FOUND. Script failed to load.");
+                }
+
+                const { DefaultRubyVM } = window["ruby-wasm-wasi"];
+                log("Ruby WASM Engine Found.");
+                updateProgress(20);
+
                 log("Initializing Terminal...");
                 if (!window.Terminal) throw new Error("xterm.js not loaded");
 
@@ -147,9 +147,9 @@
                 window.addEventListener('resize', () => fitAddon.fit());
                 updateProgress(30);
 
-                log("Downloading Ruby WASM Kernel...");
+                log("Downloading Ruby WASM Kernel (2.5.0)...");
                 const response = await fetch(
-                    "https://cdn.jsdelivr.net/npm/@ruby/3.3-wasm-wasi@2.6.0/dist/ruby+stdlib.wasm"
+                    "https://cdn.jsdelivr.net/npm/@ruby/3.3-wasm-wasi@2.5.0/dist/ruby+stdlib.wasm"
                 );
                 if (!response.ok) throw new Error(`Failed to fetch WASM: ${response.statusText}`);
 
@@ -162,7 +162,7 @@
                 updateProgress(70);
 
                 log("Fetching Project Source Code...");
-                // term.write("Fetching source files...\r\n");
+                term.write("Fetching source files...\r\n");
 
                 const files = [
                     "Source%20Code/TicTacToe/lib/main.rb",
@@ -240,10 +240,10 @@ RUBY_EOF
 
             } catch (e) {
                 log(e.message, true);
-                // alert("Error: " + e.message); 
             }
         };
 
+        // Start once DOM is ready
         start();
     </script>
 </body>
