@@ -1,5 +1,23 @@
 # frozen_string_literal: true
 
+# ==============================================================================
+# Filename: game_spec.rb
+#
+# Author: Amey Thakur (https://github.com/Amey-Thakur)
+#         Mega Satish (https://github.com/msatmod)
+#
+# Repository: https://github.com/Amey-Thakur/TIC-TAC-TOE-IN-RUBY
+# Release Date: 29 August 2022
+# License: MIT
+#
+# Description:
+# Unit tests for the `Game` class.
+# Verification Focus:
+# - Game Flow: Mocking the interaction sequence between methods.
+# - Input Handling: Verifying player creation and symbol assignment.
+# - Turn Execution: Ensuring board updates occur upon valid input.
+# ==============================================================================
+
 require_relative '../lib/game'
 require_relative '../lib/board'
 require_relative '../lib/player'

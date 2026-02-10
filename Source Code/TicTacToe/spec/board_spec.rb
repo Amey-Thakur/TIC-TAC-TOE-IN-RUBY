@@ -1,5 +1,23 @@
 # frozen_string_literal: true
 
+# ==============================================================================
+# Filename: board_spec.rb
+#
+# Author: Amey Thakur (https://github.com/Amey-Thakur)
+#         Mega Satish (https://github.com/msatmod)
+#
+# Repository: https://github.com/Amey-Thakur/TIC-TAC-TOE-IN-RUBY
+# Release Date: 29 August 2022
+# License: MIT
+#
+# Description:
+# Unit tests for the `Board` class.
+# Verification Focus:
+# - State Updates: Ensuring cells reflect player moves.
+# - Validation Logic: Confirming legal vs illegal move detection.
+# - Win/Draw Conditions: Testing all victory vectors and stalemate scenarios.
+# ==============================================================================
+
 # rubocop:disable Layout/LineLength, Metrics/BlockLength
 
 require_relative '../lib/board'

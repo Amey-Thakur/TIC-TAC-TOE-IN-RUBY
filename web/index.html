@@ -1,6 +1,29 @@
 <!DOCTYPE html>
 <html>
 
+<!--
+==============================================================================
+ Filename: index.html
+
+ Author: Amey Thakur (https://github.com/Amey-Thakur)
+         Mega Satish (https://github.com/msatmod)
+
+ Repository: https://github.com/Amey-Thakur/TIC-TAC-TOE-IN-RUBY
+ Release Date: 29 August 2022
+ License: MIT
+
+ Description:
+ The single-page application (SPA) entry point for the Tic-Tac-Toe game.
+ It orchestrates the WebAssembly (WASM) runtime environment, initializing
+ the Ruby VM and bridging it with the browser's DOM via xterm.js.
+ Key features include:
+ - Dynamic loading of Ruby 3.3 WASM compiled with WASI support.
+ - Implementation of a virtual file system (VFS) to host Ruby source code.
+ - Asynchronous Fiber-based I/O loop to enable non-blocking user input
+   within the browser-based terminal emulator.
+==============================================================================
+-->
+
 <head>
     <title>Tic Tac Toe in Ruby | Amey & Mega</title>
     <meta charset="utf-8" />
@@ -113,6 +136,16 @@
         log("Bootstrapping Future-Proof Runtime...");
     </script>
 
+    <!-- 
+    /*
+     * ============================================================================
+     * Section: Runtime Bootstrapper
+     * ============================================================================
+     * Handles the asynchronous loading of WebAssembly modules and the initialization
+     * of the standard library, utilizing the WASI shim to provide system call
+     * emulation (filesystem, stdout/stderr) for the Ruby runtime.
+     */
+    -->
     <script type="module">
         import { RubyVM } from "@ruby/wasm-wasi";
         import { WASI, ConsoleStdout, PreopenDirectory, OpenFile, File } from "@bjorn3/browser_wasi_shim";
@@ -123,6 +156,13 @@
         const start = async () => {
             try {
                 // 1. Setup Xterm
+                /*
+                 * ============================================================================
+                 * Section: Terminal Interface (xterm.js)
+                 * ============================================================================
+                 * Configures the visual terminal emulator, including font rendering, themes,
+                 * and the 'fit' addon to ensure responsive layout adaptation.
+                 */
                 log("Initializing Terminal...");
                 if (!window.Terminal) throw new Error("xterm.js not loaded");
                 const term = new Terminal({
@@ -190,6 +230,14 @@
                 updateProgress(70);
 
                 // 7. Load Source Files
+                /*
+                 * ============================================================================
+                 * Section: Virtual Filesystem (VFS) Injection
+                 * ============================================================================
+                 * Fetches raw Ruby source files from the server and writes them into the
+                 * WASM environment's in-memory filesystem (/src). This allows the Ruby VM
+                 * to 'require' and 'load' these files as if they were on a local disk.
+                 */
                 log("Fetching Project Source Code...");
 
                 const files = [
@@ -220,6 +268,15 @@
                 updateProgress(100);
 
                 // 8. Start Game (Fiber Async Mode)
+                /*
+                 * ============================================================================
+                 * Section: Game Execution & Fiber Loop
+                 * ============================================================================
+                 * The core event loop. Because `gets` in Ruby is blocking, we use Ruby Fibers
+                 * (coroutines) to suspend execution when input is needed. The `resumeGame`
+                 * JavaScript function bridges the gap, capturing keyboard input from xterm.js
+                 * and resuming the Fiber with the user's data.
+                 */
                 setTimeout(async () => {
                     document.getElementById("status").style.display = "none";
                     document.getElementById("terminal").style.display = "block";
