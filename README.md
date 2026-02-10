@@ -128,18 +128,18 @@ TIC-TAC-TOE-IN-RUBY/
 ## Results
 
 <div align="center">
-  <b>Final Gameplay: Success State</b>
+  <b>Output 1</b>
   <br>
-  <i>Amey winning the match with a vertical column completion.</i>
+  <i>Gameplay between Amey and Mega.</i>
   <br><br>
-  <img src="Output1.png" alt="Victory State" width="90%">
+  <img src="Output1.png" alt="Output 1" width="90%">
   <br><br><br>
  
-  <b>System UI: Board Display</b>
+  <b>Output 2</b>
   <br>
-  <i>Clean, high-fidelity board rendering in the console corridor.</i>
+  <i>Tic Tac Toe Board with Amey and Mega.</i>
   <br><br>
-  <img src="Output2.png" alt="Board UI" width="90%">
+  <img src="Output2.png" alt="Output 2" width="90%">
 </div>
 
 ---
