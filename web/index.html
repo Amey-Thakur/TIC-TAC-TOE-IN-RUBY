@@ -208,7 +208,9 @@
                     if (!res.ok) throw new Error(`Failed to fetch ${fileUrl}`);
                     const content = await res.text();
                     // Safe injection
-                    const safeContent = content.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '\\${').replace(/#\{/g, '\\#{');
+                    // We only need to escape backticks (JS template) and ${ (JS interpolation).
+                    // We use single-quoted heredoc <<~'RUBY_EOF' so Ruby handles #{...} and \n literally until loaded.
+                    const safeContent = content.replace(/`/g, '\\`').replace(/\$\{/g, '\\${');
                     vm.eval(`File.write("/src/${fileName}", <<~'RUBY_EOF'\n${safeContent}\nRUBY_EOF\n)`);
                     loadedCount++;
                     updateProgress(70 + (loadedCount / files.length * 20));
